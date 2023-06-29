@@ -1,36 +1,21 @@
-name: Сборка проекта
+name: dotnet format
 on:
-  push:
-    branches:
-      - master
-  pull_request:
-    branches:
-      - master
-
+    push:
+        paths:
+            - "**.cs"
+            - ".editorconfig"
 jobs:
-  build:
-    runs-on: windows-latest
-
-    steps:
-      - name: Шаг 1 - Получение кода
-        uses: actions/checkout@v2
-
-      - name: Шаг 2 - Установка Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-
-      - name: Шаг 3 - Установка зависимостей
-        run: |
-          npm install
-          # Или использовать yarn
-          # yarn install
-
-      - name: Шаг 4 - Сборка проекта
-        run: |
-          npm run build
-          # Или другая команда сборки
-
-      - name: Шаг 5 - Тестирование
-        run: npm run test
-        # Или другая команда тестирования
+    check-format:
+        runs-on: windows-latest
+        
+        steps:
+            - name: Setup .NET Core
+                uses: actions/setup-dotnet@v1
+                with:
+                    dotnet-version: '6.0.x'
+            - name: Install dotnet-format tool
+                run: dotnet tool install -g dotnet-format
+            - name: Check out code
+                uses: actions/checkout@v2
+            - name: Run dotnet format
+                run: dotnet-format --folder --check --verbosity diagnostic

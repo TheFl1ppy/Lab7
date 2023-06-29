@@ -1,0 +1,36 @@
+name: Сборка проекта
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Шаг 1 - Получение кода
+        uses: actions/checkout@v2
+
+      - name: Шаг 2 - Установка Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Шаг 3 - Установка зависимостей
+        run: |
+          npm install
+          # Или использовать yarn
+          # yarn install
+
+      - name: Шаг 4 - Сборка проекта
+        run: |
+          npm run build
+          # Или другая команда сборки
+
+      - name: Шаг 5 - Тестирование
+        run: npm run test
+        # Или другая команда тестирования
